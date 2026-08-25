@@ -2,7 +2,9 @@
 *.env
 .zbx_env
 snmp_query.env
-*token*
+*.token
+token.txt
+*_token
 *.pem
 *.key
 
@@ -19,3 +21,6 @@ __pycache__/
 
 # WSL / Windows alternate data streams
 *:Zone.Identifier
+
+# screenshots are reviewed and redacted; never ignore them
+!docs/images/
