@@ -1,0 +1,21 @@
+# Never commit credentials
+*.env
+.zbx_env
+snmp_query.env
+*token*
+*.pem
+*.key
+
+# Local scratch
+*.log
+*.out
+*.bak
+*~
+.venv/
+__pycache__/
+.DS_Store
+.idea/
+.vscode/
+
+# WSL / Windows alternate data streams
+*:Zone.Identifier

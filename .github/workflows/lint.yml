@@ -1,0 +1,34 @@
+name: lint
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  shell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dash and shellcheck
+        run: sudo apt-get update && sudo apt-get install -y dash shellcheck
+
+      - name: POSIX syntax check (Zabbix runs script bodies under /bin/sh)
+        run: |
+          for f in zbx_snmp_query.sh tools/*.sh; do
+            echo "dash -n $f"
+            dash -n "$f"
+          done
+
+      - name: shellcheck
+        run: shellcheck -s sh zbx_snmp_query.sh tools/*.sh
+
+      - name: Embedded Python syntax check
+        run: |
+          for f in zbx_snmp_query.sh tools/*.sh; do
+            sed -n "/<<'PY'\$/,/^PY\$/p" "$f" | sed '1d;$d' > /tmp/embedded.py
+            if [ -s /tmp/embedded.py ]; then
+              echo "python3 -m py_compile (embedded in $f)"
+              python3 -c "import ast; ast.parse(open('/tmp/embedded.py').read())"
+            fi
+          done
